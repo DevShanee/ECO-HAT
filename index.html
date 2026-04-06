@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECO-HAT | Login</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="center">
+    <div class="card">
+        <h2 style="text-align: center; color: #8B0000; margin-bottom: 5px;">♻ ECO-HAT</h2>
+        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-top: 0;">Sustainability Portal</p>
+        
+        <div style="margin-top: 20px;">
+            <div style="background: #f9f9f9; padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #eee;">
+                <small style="color: #8B0000; font-weight: bold;">New Student Registration</small>
+                <input id="reg-name" type="text" placeholder="Full Name">
+                <input id="reg-id" type="text" placeholder="Student ID Number">
+                <input id="reg-pass" type="password" placeholder="Create Password">
+                <button id="reg-btn" style="background:#8B0000; color:white; width:100%; margin-top:10px; border:none; padding:10px; border-radius:5px; cursor:pointer;">Register Student</button>
+            </div>
+            
+            <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+            
+            <small style="color: #666; font-weight: bold;">Account Login</small>
+            <input id="login-id" type="text" placeholder="Student ID / Admin ID">
+            <input id="login-pass" type="password" placeholder="Password">
+            <button id="login-btn" style="background: #444; margin-top: 10px; width: 100%; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer;">Login to Dashboard</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import User from './js/models/User.js';
+        import Storage from './js/services/Storage.js';
+
+        // --- 1. REGISTRATION LOGIC ---
+        document.getElementById('reg-btn').addEventListener('click', () => {
+            const name = document.getElementById("reg-name").value.trim();
+            const id = document.getElementById("reg-id").value.trim();
+            const pass = document.getElementById("reg-pass").value.trim();
+            
+            if(!name || !id || !pass) {
+                alert("Please fill in all registration fields.");
+                return;
+            }
+
+            try {
+                const newUser = new User(name, id, pass);
+                Storage.register(newUser);
+                alert("Student successfully registered! You can now login below.");
+                // Clear registration fields
+                document.getElementById("reg-name").value = "";
+                document.getElementById("reg-id").value = "";
+                document.getElementById("reg-pass").value = "";
+            } catch (e) { alert(e.message); }
+        });
+
+        // --- 2. LOGIN LOGIC ---
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const idInput = document.getElementById("login-id").value.trim();
+            const passInput = document.getElementById("login-pass").value.trim();
+
+            // A. STRICT ADMIN GATEKEEPER
+            // We check for Admin FIRST. If it matches, we go to admin and STOP.
+            if (idInput.toUpperCase() === "ADMIN" && passInput === "ECOHAT2026") {
+                window.location.href = "admin.html";
+                return; 
+            }
+
+            // B. STUDENT LOGIN FLOW
+            if(!idInput || !passInput) {
+                alert("Please enter both ID and Password.");
+                return;
+            }
+
+            try {
+                // If this succeeds, it means they are a regular student
+                Storage.login(idInput, passInput);
+                
+                // FORCE redirect to student dashboard
+                window.location.href = "dashboard.html"; 
+            } catch (e) { 
+                alert("Login Failed: Incorrect Student ID or Password."); 
+            }
+        });
+    </script>
+</body>
+</html>
