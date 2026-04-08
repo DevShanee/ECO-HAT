@@ -56,3 +56,67 @@ button { width: 100%; padding: 12px; background: var(--primary-red); color: whit
     display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center;
 }
+
+/* --- MOBILE RESPONSIVENESS --- */
+
+@media (max-width: 768px) {
+    /* 1. Stack the Header elements */
+    header {
+        flex-direction: column;
+        padding: 15px 20px;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .logout-btn {
+        width: 100%; /* Make logout easier to tap on mobile */
+    }
+
+    /* 2. Adjust Containers for smaller padding */
+    .container {
+        padding: 15px;
+    }
+
+    /* 3. Force Stats Cards to stack 1-by-1 */
+    .stats-grid {
+        grid-template-columns: 1fr; 
+        gap: 15px;
+    }
+
+    /* 4. Fix Tables (Make them scrollable so they don't break the layout) */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* 5. Adjust Dashboard items (Points and Activity) */
+    .points-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .activity-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .activity-item span:last-child {
+        align-self: flex-end;
+        font-weight: bold;
+        color: var(--primary-red);
+    }
+
+    /* 6. Rewards Grid Adjustment */
+    .rewards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* 7. Modal Adjustment */
+    .card {
+        width: 90%; /* Ensure login/modals don't go off-screen */
+        padding: 20px;
+    }
+}
